@@ -31,23 +31,43 @@ public class AuthenticationController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
         try {
             // Xác thực người dùng
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
         } catch (Exception e) {
-            throw new Exception("Incorrect username or password", e);
+            // Trả về 401 Unauthorized nếu username hoặc password không chính xác
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu hoặc tên người dùng không đúng!");
         }
 
         // Nếu xác thực thành công, tạo JWT
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails.getUsername());
 
-        // Trả về JWT token
-        return new JwtResponse(jwt);
+        // Trả về JWT token và trạng thái 200 OK
+        return ResponseEntity.ok(new JwtResponse(jwt));
     }
+
+//    @PostMapping("/login")
+//    public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+//        try {
+//            // Xác thực người dùng
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+//            );
+//        } catch (Exception e) {
+//            throw new Exception("Incorrect username or password", e);
+//        }
+//
+//        // Nếu xác thực thành công, tạo JWT
+//        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+//        final String jwt = jwtUtils.generateToken(userDetails.getUsername());
+//
+//        // Trả về JWT token
+//        return new JwtResponse(jwt);
+//    }
 
     // API để đăng ký người dùng mới
     @PostMapping("/register")
