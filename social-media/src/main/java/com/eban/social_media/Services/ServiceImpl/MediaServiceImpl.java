@@ -23,4 +23,9 @@ public class MediaServiceImpl implements MediaService {
     public void updateMedia(Media media) {
         mediaRepository.save(media);
     }
+
+    @Override
+    public List<Media> findMediaByPostId(Long postId) {
+        return mediaRepository.findMediaByPostId(postId);
+    }
 }

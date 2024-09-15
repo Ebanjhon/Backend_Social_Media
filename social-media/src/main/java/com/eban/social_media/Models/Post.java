@@ -29,8 +29,8 @@ public class Post {
         this.postDate = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "post")
-    private Set<Media> media; // Một post có thể có nhiều media
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Media> media;
 
     @OneToMany(mappedBy = "post")
     private Set<Comment> comments;

@@ -1,10 +1,18 @@
 package com.eban.social_media.DTO;
 
+import com.eban.social_media.Models.MediaType;
+
 public class MediaDTO {
     private String mediaType,mediaUrl;
 
     public MediaDTO(String mediaType, String mediaUrl) {
         this.mediaType = mediaType;
+        this.mediaUrl = mediaUrl;
+    }
+
+    // Constructor
+    public MediaDTO(MediaType mediaType, String mediaUrl) {
+        this.mediaType = mediaType != null ? mediaType.name() : "UNKNOWN"; // Chuyển MediaType thành String
         this.mediaUrl = mediaUrl;
     }
 

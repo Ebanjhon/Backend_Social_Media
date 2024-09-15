@@ -4,8 +4,8 @@ import com.eban.social_media.Models.Media;
 
 import java.util.List;
 
-public interface MediaService {
+public interface MediaService{
     void createMedia(Media media);
-
     void updateMedia(Media media);
+    List<Media> findMediaByPostId(Long postId);
 }
