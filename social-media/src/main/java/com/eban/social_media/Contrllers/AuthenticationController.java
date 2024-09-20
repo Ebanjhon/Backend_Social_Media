@@ -50,25 +50,6 @@ public class AuthenticationController {
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
-//    @PostMapping("/login")
-//    public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-//        try {
-//            // Xác thực người dùng
-//            authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-//            );
-//        } catch (Exception e) {
-//            throw new Exception("Incorrect username or password", e);
-//        }
-//
-//        // Nếu xác thực thành công, tạo JWT
-//        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-//        final String jwt = jwtUtils.generateToken(userDetails.getUsername());
-//
-//        // Trả về JWT token
-//        return new JwtResponse(jwt);
-//    }
-
     // API để đăng ký người dùng mới
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody User user) {

@@ -108,7 +108,25 @@
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>  <!-- Thường chỉ dùng trong test, nhưng bạn có thể bỏ dòng này để dùng ngoài test -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+
 	</dependencies>
+
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -125,6 +143,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,6 +39,9 @@ public class PostController {
     private CommentServiceImpl commentServiceImpl;
 
     @Autowired
+    private ImageService imageService;
+
+    @Autowired
     public PostController(StorageService storageService) {
         this.storageService = storageService;
     }
@@ -58,7 +62,6 @@ public class PostController {
         // Trả về đối tượng Page trực tiếp
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
-
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createPost(
@@ -84,20 +87,38 @@ public class PostController {
         Post posted = postService.savePost(post);
 
         // bắt đầu lưu danh sách media
-        // Xử lý tải lên media và liên kết với bài viết
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
-                // Upload file và lấy URL
-                String fileUrl = storageService.uploadFile(file);
+                // Xác định loại file dựa trên content type(loại ảnh)
+                com.eban.social_media.Models.MediaType mediaType = getMediaType(file.getContentType());
 
-                // Tạo đối tượng Media
-                Media media = new Media();
-                media.setMediaUrl(fileUrl);
-                media.setMediaType(getMediaType(file.getContentType()));
-                media.setPost(posted); // Liên kết với bài viết đã được lưu
+                // nếu là dạng ảnh
+                if (mediaType == com.eban.social_media.Models.MediaType.IMAGE) {
 
-                // Lưu Media vào cơ sở dữ liệu
-                mediaService.createMedia(media);
+                    // kích thước tôi đã của hình ảnh là 800px x 600px
+                    file = imageService.resizeImage(file);
+
+                    // Upload file vào GCP và nhận URL ảnh
+                    String fileUrl = storageService.uploadFile((MultipartFile) file);
+
+                    // Tạo đối tượng Media và lưu vào DB
+                    Media media = new Media();
+                    media.setMediaUrl(fileUrl);
+                    media.setMediaType(mediaType);
+                    media.setPost(posted);
+                    mediaService.createMedia(media);
+
+                } else {
+                    // Không resize, chỉ upload file không phải ảnh (như video hoặc âm thanh)
+                    String fileUrl = storageService.uploadFile(file);
+
+                    // Tạo đối tượng Media và lưu vào DB
+                    Media media = new Media();
+                    media.setMediaUrl(fileUrl);
+                    media.setMediaType(mediaType); // Loại media có thể là video, âm thanh
+                    media.setPost(posted);
+                    mediaService.createMedia(media);
+                }
             }
         }
         return ResponseEntity.ok("Đăng bài viết thành công!");

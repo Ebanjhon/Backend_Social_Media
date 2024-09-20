@@ -23,22 +23,28 @@ public class FollowController {
         try {
             Boolean result = followServiceImpl.Following(followRequestDTO.getIdUser(), followRequestDTO.getIdTargetUser());
             if (result) {
-                return ResponseEntity.status(HttpStatus.OK).body("User followed successfully");
+                return ResponseEntity.status(HttpStatus.OK).body("Đã theo dỏi ng dùng thành công!");
             } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to follow user");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bạn đã theo dỏi người dùng này");
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi: " + e.getMessage());
         }
     }
 
+//    Theo chuẩn REST, các phương thức DELETE không nên có phần thân yêu cầu (request body). Hầu hết các thư viện HTTP (bao gồm cả Spring và một số trình duyệt) không xử lý tốt khi gửi dữ liệu trong thân yêu cầu cho phương thức DELETE.
+
     @DeleteMapping
-    public ResponseEntity<String> unfollowUser(@RequestBody FollowDTO followRequestDTO) {
-        Boolean result = followServiceImpl.unfollow(followRequestDTO.getIdUser(), followRequestDTO.getIdTargetUser());
-        if(result) {
+    public ResponseEntity<String> unfollowUser(
+            @RequestParam Long idUser,
+            @RequestParam Long idTargetUser) {
+
+        Boolean result = followServiceImpl.unfollow(idUser, idTargetUser);
+
+        if (result) {
             return ResponseEntity.status(HttpStatus.OK).body("User unfollowed successfully");
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to unfollow user");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unable to unfollow user");
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.eban.social_media.Services.ServiceImpl;
 
+import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.DTO.UserDTO;
 import com.eban.social_media.Models.User;
 import com.eban.social_media.Repositories.UserRepository;
@@ -70,5 +71,10 @@ public class UserServiceImpl implements UserService{
                 ,u.getUsername(), u.getGender().toString()
                 ,u.getEmail(), u.getAvatar(), u.getPhone() );
         return userDTO;
+    }
+
+    @Override
+    public List<SearchUserDTO> SearchUser(String text, Long idUser) {
+        return userRepository.searchUsersWithFollowStatus(text, idUser);
     }
 }

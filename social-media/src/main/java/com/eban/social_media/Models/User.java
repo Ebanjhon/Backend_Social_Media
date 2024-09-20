@@ -1,8 +1,10 @@
 package com.eban.social_media.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -42,6 +44,10 @@ public class User {
 
     @Column(nullable = false)
     private String phone;
+
+    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime timeCreated;

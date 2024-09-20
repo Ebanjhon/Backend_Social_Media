@@ -1,5 +1,6 @@
 package com.eban.social_media.Contrllers;
 
+import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.DTO.UserDTO;
 import com.eban.social_media.JWT.JwtUtils;
 import com.eban.social_media.Models.User;
@@ -68,4 +69,16 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SearchUserDTO>> findUserDTO(@RequestParam String text, @RequestParam Long idUser){
+        List<SearchUserDTO> listU = userService.SearchUser(text, idUser);
+        if(listU.isEmpty())
+        {
+            return ResponseEntity.notFound().build();
+        }else {
+           return ResponseEntity.ok(listU);
+        }
+    }
+
 }

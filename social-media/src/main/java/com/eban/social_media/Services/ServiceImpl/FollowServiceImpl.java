@@ -17,13 +17,12 @@ public class FollowServiceImpl implements FollowService {
     private UserServiceImpl userServiceImpl;
 
     @Override
-    public Boolean unfollow(Long userFollow, Long userfollowing) {
-        try{
-            followRepository.deleteByUserIdAndUserFollowId(userFollow, userfollowing);
+    public Boolean unfollow(Long userId, Long targetUserId) {
+        try {
+            followRepository.deleteFollow(userId, targetUserId);
             return true;
-        }
-        catch(Exception e){
-            return false;
+        } catch (Exception e) {
+            return false; // Trả về false nếu có lỗi xảy ra
         }
     }
 

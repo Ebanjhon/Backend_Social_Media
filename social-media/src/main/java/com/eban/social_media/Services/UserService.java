@@ -1,5 +1,6 @@
 package com.eban.social_media.Services;
 
+import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.DTO.UserDTO;
 import com.eban.social_media.Models.User;
 
@@ -23,4 +24,6 @@ public interface UserService {
     User getUserByUsername(String username);
 
     UserDTO getUserDTOByUsername(String username);
+
+    List<SearchUserDTO> SearchUser(String text, Long idUserCurent);
 }
