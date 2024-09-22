@@ -2,9 +2,9 @@ package com.eban.social_media.DTO;
 
 public class UserDTO {
     private Long id;
-    private String firstName, lastName, username, gender, email, avatar, phone;
+    private String firstName, lastName, username, gender, email, avatar, phone, role;
 
-    public UserDTO(Long id, String firstName, String lastName, String username, String gender, String email, String avatar, String phone) {
+    public UserDTO(Long id, String firstName, String lastName, String username, String gender, String email, String avatar, String phone, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -13,6 +13,7 @@ public class UserDTO {
         this.email = email;
         this.avatar = avatar;
         this.phone = phone;
+        this.role = role;
     }
 
     public UserDTO() {
@@ -80,5 +81,13 @@ public class UserDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

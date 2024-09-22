@@ -31,7 +31,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register").permitAll()  // Cho phép truy cập không cần xác thực vào API đăng nhập và đăng ký
+                        .requestMatchers("/api/login", "/api/register", "/api/admin-auth").permitAll()  // Cho phép truy cập không cần xác thực vào API đăng nhập và đăng ký
                         .anyRequest().authenticated()  // Các API khác yêu cầu xác thực
                 )
                 .formLogin(form -> form
