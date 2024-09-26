@@ -3,12 +3,8 @@ package com.eban.social_media.DTO;
 import com.eban.social_media.Models.MediaType;
 
 public class MediaDTO {
+    private Long mediaId;
     private String mediaType,mediaUrl;
-
-    public MediaDTO(String mediaType, String mediaUrl) {
-        this.mediaType = mediaType;
-        this.mediaUrl = mediaUrl;
-    }
 
     // Constructor
     public MediaDTO(MediaType mediaType, String mediaUrl) {
@@ -16,7 +12,19 @@ public class MediaDTO {
         this.mediaUrl = mediaUrl;
     }
 
-    public MediaDTO() {}
+    public MediaDTO(Long mediaId, MediaType mediaType, String mediaUrl) {
+        this.mediaId = mediaId;
+        this.mediaType = mediaType.toString();
+        this.mediaUrl = mediaUrl;
+    }
+
+    public Long getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(Long mediaId) {
+        this.mediaId = mediaId;
+    }
 
     public String getMediaType() {
         return mediaType;

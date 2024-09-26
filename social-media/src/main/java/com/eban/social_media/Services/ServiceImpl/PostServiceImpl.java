@@ -2,6 +2,7 @@ package com.eban.social_media.Services.ServiceImpl;
 
 import com.eban.social_media.DTO.ListPostDTO;
 import com.eban.social_media.DTO.MediaDTO;
+import com.eban.social_media.DTO.MyPostDTO;
 import com.eban.social_media.Models.Post;
 import com.eban.social_media.Repositories.CommentRepository;
 import com.eban.social_media.Repositories.MediaRepository;
@@ -66,6 +67,45 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+    @Override
+    public List<MyPostDTO> getMyPost(Long userId) {
+        List<MyPostDTO> myPosts =  postRepository.getMyPostsByUserId(userId);
+
+        myPosts.forEach(p -> {
+            List<MediaDTO> mediaDTOs = mediaRepository.findMediaByPostId(p.getIdPost())
+                    .stream()
+                    .map(media -> new MediaDTO(media.getMediaType(), media.getMediaUrl()))
+                    .collect(Collectors.toList());
+            p.setMedias(mediaDTOs);
+        });
+        return myPosts;
+    }
+
+    @Override
+    public Page<ListPostDTO> getPostLiked(Long userId, Pageable pageable) {
+        // Bước 1: Lấy danh sách bài đăng mà không có media
+        Page<ListPostDTO> postsPage = postRepository.getPostLiked(userId, pageable);
+
+        // Bước 2: Lấy media cho từng bài đăng và ánh xạ vào DTO
+        postsPage.forEach(postDTO -> {
+            // Lấy danh sách media từ MediaRepository
+            List<MediaDTO> mediaDTOs = mediaRepository.findMediaByPostId(postDTO.getIdPost())
+                    .stream()
+                    .map(media -> new MediaDTO(media.getMediaType(), media.getMediaUrl()))
+                    .collect(Collectors.toList());
+
+            // Gán danh sách media vào DTO
+            postDTO.setMedias(mediaDTOs);
+        });
+
+        return postsPage;
+    }
+
+    @Override
+    public Long countLike(Long postId) {
+        return postRepository.countLikePost(postId);
     }
 
 }

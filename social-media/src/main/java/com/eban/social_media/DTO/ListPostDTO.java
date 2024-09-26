@@ -7,14 +7,15 @@ import java.util.List;
 public class ListPostDTO {
     private Long idUser, idPost;
     private String firstname, lastname, username, content, avatar;
-    private boolean following;
+    private boolean following, isLiked;
     private LocalDateTime dateCreated;
     private List<MediaDTO> medias;
+    private Long likes;
 
-    // contructor
-    public ListPostDTO() {}
-
-    public ListPostDTO(Long idUser, Long idPost, String firstname, String lastname, String username, String content, String avatar, boolean following, LocalDateTime dateCreated) {
+    // Constructor đầy đủ
+    public ListPostDTO(Long idUser, Long idPost, String firstname, String lastname,
+                       String username, String content, String avatar, boolean following,
+                       LocalDateTime dateCreated, Long likes, boolean isLiked) {
         this.idUser = idUser;
         this.idPost = idPost;
         this.firstname = firstname;
@@ -24,17 +25,11 @@ public class ListPostDTO {
         this.avatar = avatar;
         this.following = following;
         this.dateCreated = dateCreated;
+        this.likes = likes;
+        this.isLiked = isLiked;
     }
 
     //    getter and setter
-
-    public Long getIdPost() {
-        return idPost;
-    }
-
-    public void setIdPost(Long idPost) {
-        this.idPost = idPost;
-    }
 
     public Long getIdUser() {
         return idUser;
@@ -42,6 +37,14 @@ public class ListPostDTO {
 
     public void setIdUser(Long idUser) {
         this.idUser = idUser;
+    }
+
+    public Long getIdPost() {
+        return idPost;
+    }
+
+    public void setIdPost(Long idPost) {
+        this.idPost = idPost;
     }
 
     public String getFirstname() {
@@ -76,12 +79,36 @@ public class ListPostDTO {
         this.content = content;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public boolean isFollowing() {
         return following;
     }
 
     public void setFollowing(boolean following) {
-        following = following;
+        this.following = following;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public List<MediaDTO> getMedias() {
@@ -92,19 +119,11 @@ public class ListPostDTO {
         this.medias = medias;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public Long getLikes() {
+        return likes;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setLikes(Long likes) {
+        this.likes = likes;
     }
 }

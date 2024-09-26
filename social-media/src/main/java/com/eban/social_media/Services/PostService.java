@@ -1,6 +1,7 @@
 package com.eban.social_media.Services;
 
 import com.eban.social_media.DTO.ListPostDTO;
+import com.eban.social_media.DTO.MyPostDTO;
 import com.eban.social_media.Models.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,7 @@ public interface PostService {
     Page<ListPostDTO> getListPostsDTO(Long idUser, Pageable pageable);
     Post getPost(Long id);
     void deletePost(Long id);
+    List<MyPostDTO> getMyPost(Long userId);
+    Page<ListPostDTO> getPostLiked(Long userId, Pageable pageable);
+    Long countLike(Long postId);
 }

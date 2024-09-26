@@ -6,6 +6,8 @@ import com.eban.social_media.Services.RoomChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class RoomChatServiceImpl implements RoomChatService {
 
@@ -15,5 +17,11 @@ public class RoomChatServiceImpl implements RoomChatService {
     @Override
     public RoomChat createRoom(RoomChat roomChat) {
         return roomChatRepository.save(roomChat);
+    }
+
+    @Override
+    public Long getRoomChat(Long firstUser, Long lastUser) {
+        Optional<Long> roomChatId = roomChatRepository.getRoomChatByTwoUser(firstUser,lastUser);
+        return roomChatId.orElse(null);
     }
 }

@@ -33,7 +33,6 @@ public class FollowController {
     }
 
 //    Theo chuẩn REST, các phương thức DELETE không nên có phần thân yêu cầu (request body). Hầu hết các thư viện HTTP (bao gồm cả Spring và một số trình duyệt) không xử lý tốt khi gửi dữ liệu trong thân yêu cầu cho phương thức DELETE.
-
     @DeleteMapping
     public ResponseEntity<String> unfollowUser(
             @RequestParam Long idUser,

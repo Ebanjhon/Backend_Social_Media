@@ -1,6 +1,9 @@
 package com.eban.social_media.Contrllers;
 
+import com.eban.social_media.DTO.LikeDTO;
 import com.eban.social_media.DTO.ListPostDTO;
+import com.eban.social_media.DTO.MyPostDTO;
+import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.Models.Media;
 import com.eban.social_media.Models.Post;
 import com.eban.social_media.Models.User;
@@ -42,6 +45,11 @@ public class PostController {
     private ImageService imageService;
 
     @Autowired
+    private LikeServiceImpl likeServiceImpl;
+    @Autowired
+    private PostServiceImpl postServiceImpl;
+
+    @Autowired
     public PostController(StorageService storageService) {
         this.storageService = storageService;
     }
@@ -67,7 +75,7 @@ public class PostController {
     public ResponseEntity<?> createPost(
             @RequestPart("userId") String uid,
             @RequestPart("content") String content,
-            @RequestPart("files") List<MultipartFile> files) throws IOException {
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
 
         // Chuyển đổi userId từ String sang Long
         Long userId = Long.parseLong(uid);
@@ -86,7 +94,7 @@ public class PostController {
         // Lưu bài đăng vào cơ sở dữ liệu
         Post posted = postService.savePost(post);
 
-        // bắt đầu lưu danh sách media
+        // bắt đầu lưu danh sách media, check có file hay không?
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 // Xác định loại file dựa trên content type(loại ảnh)
@@ -148,6 +156,57 @@ public class PostController {
             return ResponseEntity.ok("Post and associated comments deleted successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/myposts")
+    public ResponseEntity<List<MyPostDTO>> getMyPosts(@RequestParam Long idUser){
+        try{
+            return ResponseEntity.ok(postService.getMyPost(idUser));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/posts-liked")
+    public ResponseEntity<Page<ListPostDTO>> getPostLiked(@RequestParam Long idUser,@PageableDefault(size = 10) Pageable pageable){
+        // Nhận đối tượng Page từ service
+        Page<ListPostDTO> posts = postService.getPostLiked(idUser, pageable);
+
+        // Kiểm tra nếu không có dữ liệu trả về
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        // Trả về đối tượng Page trực tiếp
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/like-post")
+    public ResponseEntity<LikeDTO> likePost(@RequestParam Long userId, @RequestParam Long postId) {
+        try{
+            likeServiceImpl.likePost(userId, postId);
+            Long countLike = postServiceImpl.countLike(postId);
+            LikeDTO likedto = new LikeDTO();
+            likedto.setPostId(postId);
+            likedto.setCountLike(countLike);
+            return ResponseEntity.ok(likedto);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/like-post")
+    public ResponseEntity<LikeDTO> disLikePost(@RequestParam Long userId, @RequestParam Long postId) {
+        try{
+            likeServiceImpl.disLike(userId, postId);
+            Long countLike = postServiceImpl.countLike(postId);
+            LikeDTO likedto = new LikeDTO();
+            likedto.setPostId(postId);
+            likedto.setCountLike(countLike);
+            return ResponseEntity.ok(likedto);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

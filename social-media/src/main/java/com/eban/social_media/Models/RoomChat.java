@@ -13,7 +13,7 @@ public class RoomChat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Khóa chính tự động sinh
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true)
     private String name; // Tên phòng trò chuyện
 
     @OneToMany(mappedBy = "roomChat")

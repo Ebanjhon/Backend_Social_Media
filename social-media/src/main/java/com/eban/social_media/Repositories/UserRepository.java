@@ -1,5 +1,6 @@
 package com.eban.social_media.Repositories;
 
+import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.Models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +33,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<SearchUserDTO> searchUsersWithFollowStatus(@Param("searchTerm") String searchTerm, @Param("currentUserId") Long currentUserId);
 
 
+    // lấy thông tin chi tiết
+
+    @Query("SELECT new com.eban.social_media.DTO.ProfileDetailDTO(" +
+            "(SELECT COUNT(p) FROM Post p WHERE p.user.id = :userId), " +             // Đếm số bài viết
+            "(SELECT COUNT(f) FROM UserFollow f WHERE f.userFollow.id = :userId), " +  // Đếm số người theo dõi (followers)
+            "(SELECT COUNT(f) FROM UserFollow f WHERE f.user.id = :userId))"           // Đếm số người đang theo dõi (following)
+    )
+    ProfileDetailDTO getProfileDetail(@Param("userId") Long userId);
 }

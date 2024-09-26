@@ -1,20 +1,20 @@
 package com.eban.social_media.Services.ServiceImpl;
 
+import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.DTO.UserDTO;
 import com.eban.social_media.Models.User;
 import com.eban.social_media.Repositories.UserRepository;
 import com.eban.social_media.Services.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Lazy
 @Service
@@ -76,5 +76,22 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<SearchUserDTO> SearchUser(String text, Long idUser) {
         return userRepository.searchUsersWithFollowStatus(text, idUser);
+    }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
+
+    @Transactional
+    @Override
+    public void updateAvatar(User user, String avatar) {
+        user.setAvatar(avatar); // Cập nhật avatar
+        userRepository.save(user);
+    }
+
+    @Override
+    public ProfileDetailDTO getProfileDetail(Long userId) {
+        return userRepository.getProfileDetail(userId);
     }
 }
