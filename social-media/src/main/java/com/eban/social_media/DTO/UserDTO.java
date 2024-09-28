@@ -1,10 +1,13 @@
 package com.eban.social_media.DTO;
 
+import java.time.LocalDate;
+
 public class UserDTO {
     private Long id;
     private String firstName, lastName, username, gender, email, avatar, phone, role;
+    private LocalDate birth;
 
-    public UserDTO(Long id, String firstName, String lastName, String username, String gender, String email, String avatar, String phone, String role) {
+    public UserDTO(Long id, String firstName, String lastName, String username, String gender, String email, String avatar, String phone, String role, LocalDate birth) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -14,6 +17,7 @@ public class UserDTO {
         this.avatar = avatar;
         this.phone = phone;
         this.role = role;
+        this.birth = birth;
     }
 
     public UserDTO() {
@@ -89,5 +93,13 @@ public class UserDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public LocalDate getBirth() {
+        return birth;
+    }
+
+    public void setBirth(LocalDate birth) {
+        this.birth = birth;
     }
 }

@@ -1,5 +1,6 @@
 package com.eban.social_media.Contrllers;
 
+import com.eban.social_media.DTO.UserFollowChatDTO;
 import com.eban.social_media.Models.Chat;
 import com.eban.social_media.Models.RoomChat;
 import com.eban.social_media.Models.User;
@@ -27,6 +28,8 @@ public class ChatController {
 
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private ChatServiceImpl chatServiceImpl;
 
     @GetMapping("/room")
     public ResponseEntity<Long> createRoomChat(@RequestParam Long firstUserId, @RequestParam Long lastUserId){
@@ -50,6 +53,16 @@ public class ChatController {
             return new ResponseEntity<>(room.getId(), HttpStatus.OK);
         }else{
             return new ResponseEntity<>(idRoom, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserFollowChatDTO>> getListChat(@RequestParam Long userId){
+        List<UserFollowChatDTO> listChat = chatServiceImpl.getListChatFollow(userId);
+        if(listChat.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(listChat, HttpStatus.OK);
         }
     }
 

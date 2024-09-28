@@ -121,4 +121,20 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO user) {
+        try {
+            // Kiểm tra xem user có null hay không
+            if (user == null) {
+                return new ResponseEntity<>("User data is required", HttpStatus.BAD_REQUEST);
+            }
+            userServiceImpl.updateUser(user);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // Xử lý các ngoại lệ khác
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

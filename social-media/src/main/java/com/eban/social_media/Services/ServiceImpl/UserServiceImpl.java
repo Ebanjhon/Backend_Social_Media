@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Lazy
 @Service
+@Transactional
 public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService{
         UserDTO userDTO = new UserDTO(u.getId()
                 ,u.getFirstname(), u.getLastname()
                 ,u.getUsername(), u.getGender().toString()
-                ,u.getEmail(), u.getAvatar(), u.getPhone(), u.getRole().toString() );
+                ,u.getEmail(), u.getAvatar(), u.getPhone(), u.getRole().toString(), u.getBirthDate() );
         return userDTO;
     }
 
@@ -79,11 +80,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateUser(User user) {
-
+    public void updateUser(UserDTO userDTO) {
+        User user = getUserById(userDTO.getId());
+        user.setFirstname(userDTO.getFirstName());
+        user.setLastname(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setPhone(userDTO.getPhone());
+        user.setBirthDate(userDTO.getBirth());
+        userRepository.save(user);
     }
 
-    @Transactional
     @Override
     public void updateAvatar(User user, String avatar) {
         user.setAvatar(avatar); // Cập nhật avatar

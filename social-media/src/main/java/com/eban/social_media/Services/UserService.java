@@ -28,7 +28,7 @@ public interface UserService {
 
     List<SearchUserDTO> SearchUser(String text, Long idUserCurent);
 
-    void updateUser(User user);
+    void updateUser(UserDTO user);
 
     void updateAvatar(User user, String avatar);
 
