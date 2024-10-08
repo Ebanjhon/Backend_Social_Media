@@ -7,7 +7,7 @@ import com.eban.social_media.Models.Comment;
 import java.util.List;
 
 public interface CommentService {
-    void saveComment(CommentCreateDTO comment);
+    void saveComment(CommentCreateDTO comment) throws Exception;
     Comment getCommentByIdComment(Long id);
     List<CommentResponseDTO> getCommentByPostId(Long postId);
     void deleteComment(Long id);

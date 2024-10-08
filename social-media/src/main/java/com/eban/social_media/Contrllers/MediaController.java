@@ -22,12 +22,11 @@ public class MediaController {
     @GetMapping
     public ResponseEntity<Page<MediaDTO>> getListPost(
             @RequestParam Long userId,
-            @PageableDefault(size = 20) Pageable pageable) {
+            @PageableDefault(size = 10) Pageable pageable) {
 
         Page<MediaDTO> medias = mediaService.getMediaByPostId(userId, pageable);
 
-        // Kiểm tra nếu không có dữ liệu trả về
-        if (medias.isEmpty()) {
+        if (medias.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medias, HttpStatus.OK);

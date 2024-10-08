@@ -1,5 +1,6 @@
 package com.eban.social_media.Services.ServiceImpl;
 
+import com.eban.social_media.Models.NotifiType;
 import com.eban.social_media.Models.User;
 import com.eban.social_media.Models.UserFollow;
 import com.eban.social_media.Repositories.FollowRepository;
@@ -15,6 +16,9 @@ public class FollowServiceImpl implements FollowService {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    @Autowired
+    private NotificationServiceImpl notificationServiceImpl;
+
     @Override
     public Boolean unfollow(Long userId, Long targetUserId) {
         try {
@@ -26,7 +30,7 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public Boolean Following(Long idUser, Long idTargetUser) {
+    public Boolean Following(Long idUser, Long idTargetUser) throws Exception {
         User user = userServiceImpl.getUserById(idUser);
         User targetUser = userServiceImpl.getUserById(idTargetUser);
 
@@ -41,6 +45,7 @@ public class FollowServiceImpl implements FollowService {
             userFL.setUser(user);
             userFL.setUserFollow(targetUser);
             followRepository.save(userFL);
+            notificationServiceImpl.createNotification(idUser, idTargetUser, NotifiType.FOLLOW);
             return true;
         }
         return false;

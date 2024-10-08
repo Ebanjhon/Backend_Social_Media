@@ -17,11 +17,15 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private String title;
+    // Người tạo thông báo
+    @ManyToOne
+    @JoinColumn(name = "user_notifi_id", nullable = false)
+    private User userNotifi;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
+    // Enum để lưu loại thông báo
+    @Enumerated(EnumType.STRING) // Lưu dưới dạng chuỗi trong cơ sở dữ liệu
+    @Column(nullable = false)
+    private NotifiType notifiType;
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
@@ -32,6 +36,6 @@ public class Notification {
     @PrePersist
     protected void onCreate() {
         this.timestamp = LocalDateTime.now();
-        this.read = false; // Thông báo mặc định là chưa đọc
+        this.read = false;
     }
 }

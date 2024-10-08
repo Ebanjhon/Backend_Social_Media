@@ -124,6 +124,14 @@
 			<artifactId>spring-test</artifactId>
 		</dependency>
 
+		<!-- Dependency cho Spring Boot WebSocket -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
+		
+
 	</dependencies>
 
 

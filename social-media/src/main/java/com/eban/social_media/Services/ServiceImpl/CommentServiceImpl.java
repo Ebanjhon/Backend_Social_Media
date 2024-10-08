@@ -4,6 +4,7 @@ import com.eban.social_media.DTO.CommentCreateDTO;
 import com.eban.social_media.DTO.CommentDTO;
 import com.eban.social_media.DTO.CommentResponseDTO;
 import com.eban.social_media.Models.Comment;
+import com.eban.social_media.Models.NotifiType;
 import com.eban.social_media.Models.Post;
 import com.eban.social_media.Models.User;
 import com.eban.social_media.Repositories.CommentRepository;
@@ -26,19 +27,34 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private PostServiceImpl postServiceImpl;
 
+    @Autowired
+    private NotificationServiceImpl notificationServiceImpl;
+
     @Override
-    public void saveComment(CommentCreateDTO comment) {
+    public void saveComment(CommentCreateDTO comment) throws Exception {
         Comment c = new Comment();
         User user = userServiceImpl.getUserById(comment.getIdUser());
         Post p = postServiceImpl.getPost(comment.getIdPost());
         c.setUser(user);
         c.setPost(p);
         c.setContent(comment.getContent());
-        if(comment.getIdCmtParent() != 0)
+
+        if(comment.getIdCmtParent() != 0)// có bình luận cha
         {
             Comment cmtParent = commentRepository.getReferenceById(comment.getIdCmtParent());
             c.setParentComment(cmtParent);
+            // thông báo
+            if(user.getId() != p.getUser().getId())
+            {
+                notificationServiceImpl.createNotification(user.getId(), p.getUser().getId(), NotifiType.REPLY_COMMENT);
+            }
+        }else{
+            if(user.getId() != p.getUser().getId())
+            {
+                notificationServiceImpl.createNotification(user.getId(), p.getUser().getId(), NotifiType.COMMENT);
+            }
         }
+
         commentRepository.save(c);
     }
 

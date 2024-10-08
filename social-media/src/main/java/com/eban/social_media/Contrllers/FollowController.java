@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class FollowController {
 
-
     @Autowired
     private FollowServiceImpl followServiceImpl;
 
