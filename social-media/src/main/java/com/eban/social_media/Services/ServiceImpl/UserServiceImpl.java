@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService{
         UserDTO userDTO = new UserDTO(u.getId()
                 ,u.getFirstname(), u.getLastname()
                 ,u.getUsername(), u.getGender().toString()
-                ,u.getEmail(), u.getAvatar(), u.getPhone(), u.getRole().toString(), u.getBirthDate() );
+                ,u.getEmail(), u.getAvatar(), u.getPhone(), u.getRole().toString(), u.getBirthDate(), u.isActive() );
         return userDTO;
     }
 
@@ -99,5 +99,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public ProfileDetailDTO getProfileDetail(Long userId) {
         return userRepository.getProfileDetail(userId);
+    }
+
+    @Override
+    public void activateUser(Long userId) {
+        User user = getUserById(userId);
+        user.setActive(true);
+        userRepository.save(user);
     }
 }

@@ -6,8 +6,9 @@ public class UserDTO {
     private Long id;
     private String firstName, lastName, username, gender, email, avatar, phone, role;
     private LocalDate birth;
+    private boolean active;
 
-    public UserDTO(Long id, String firstName, String lastName, String username, String gender, String email, String avatar, String phone, String role, LocalDate birth) {
+    public UserDTO(Long id, String firstName, String lastName, String username, String gender, String email, String avatar, String phone, String role, LocalDate birth, boolean active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -18,9 +19,15 @@ public class UserDTO {
         this.phone = phone;
         this.role = role;
         this.birth = birth;
+        this.active = active;
     }
 
-    public UserDTO() {
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Long getId() {

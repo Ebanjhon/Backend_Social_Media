@@ -49,6 +49,9 @@ public class User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
+    @Column(nullable = false)
+    private boolean active = false;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime timeCreated;
 

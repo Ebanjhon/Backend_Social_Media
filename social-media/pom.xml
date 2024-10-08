@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>21</java.version>
 		<spring-cloud-gcp.version>5.6.0</spring-cloud-gcp.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
@@ -130,7 +130,15 @@
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
-		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
 
 	</dependencies>
 
@@ -167,10 +175,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version> <!-- Hoặc phiên bản mới hơn nếu có -->
+				<version>3.10.1</version> <!-- Hoặc phiên bản mới hơn nếu có -->
 				<configuration>
-					<source>11</source> <!-- Chỉ định phiên bản Java -->
-					<target>11</target>
+					<source>21</source> <!-- Chỉ định phiên bản Java 21 -->
+					<target>21</target>
 				</configuration>
 			</plugin>
 

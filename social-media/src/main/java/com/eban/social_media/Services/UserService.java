@@ -34,5 +34,6 @@ public interface UserService {
 
     ProfileDetailDTO getProfileDetail(Long userId);
 
+    void activateUser(Long userId);
 
 }
