@@ -8,12 +8,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class WebConfig implements WebMvcConfigurer {
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Áp dụng cho tất cả các endpoint
-                .allowedOrigins("*") // Cho phép tất cả các nguồn gốc
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Các method cho phép
-                .allowedHeaders("*") // Cho phép tất cả header
-                .allowCredentials(false); // Không sử dụng credentials
+        registry.addMapping("/**")
+                .allowedOriginPatterns("http://localhost:3000") // Cho phép origin của React app
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Bổ sung OPTIONS
+                .allowedHeaders("*")
+                .allowCredentials(false); // Cho phép thông tin đăng nhập (nếu cần)
     }
 }
+
+

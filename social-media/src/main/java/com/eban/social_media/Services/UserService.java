@@ -1,9 +1,11 @@
 package com.eban.social_media.Services;
 
+import com.eban.social_media.DTO.ManaUserDTO;
 import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.DTO.UserDTO;
 import com.eban.social_media.Models.User;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -35,5 +37,9 @@ public interface UserService {
     ProfileDetailDTO getProfileDetail(Long userId);
 
     void activateUser(Long userId);
+
+    void unActivateUser(Long userId);
+
+    List<ManaUserDTO> getManaUsers(String text, Pageable pageable );
 
 }

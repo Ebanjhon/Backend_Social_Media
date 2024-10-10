@@ -1,5 +1,6 @@
 package com.eban.social_media.Services.ServiceImpl;
 
+import com.eban.social_media.DTO.ManaUserDTO;
 import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.DTO.UserDTO;
@@ -10,9 +11,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +73,7 @@ public class UserServiceImpl implements UserService{
         User u = getUserByUsername(username);
         UserDTO userDTO = new UserDTO(u.getId()
                 ,u.getFirstname(), u.getLastname()
-                ,u.getUsername(), u.getGender().toString()
+                ,u.getUsername(), u.getGender()
                 ,u.getEmail(), u.getAvatar(), u.getPhone(), u.getRole().toString(), u.getBirthDate(), u.isActive() );
         return userDTO;
     }
@@ -106,5 +110,28 @@ public class UserServiceImpl implements UserService{
         User user = getUserById(userId);
         user.setActive(true);
         userRepository.save(user);
+    }
+
+    @Override
+    public void unActivateUser(Long userId) {
+        User user = getUserById(userId);
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<ManaUserDTO> getManaUsers(String text, Pageable pageable) {
+        List<ManaUserDTO> manaUsers = new ArrayList<>();
+        Page<UserDTO> usersPage = userRepository.findUsersWithFilter(text, pageable);
+        List<UserDTO> usersList = usersPage.getContent(); // Sử dụng getContent() để lấy danh sách các phần tử
+
+        for (UserDTO user : usersList) {
+            ManaUserDTO manaUser = new ManaUserDTO();
+            ProfileDetailDTO profileDetailDTO = userRepository.getProfileDetail(user.getId());
+            manaUser.setUserDTO(user);
+            manaUser.setProfileDetailDTO(profileDetailDTO);
+            manaUsers.add(manaUser);
+        }
+        return manaUsers;
     }
 }

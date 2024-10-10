@@ -1,50 +1,46 @@
 package com.eban.social_media.Contrllers;
 
-
-import com.eban.social_media.Models.User;
 import com.eban.social_media.Services.ServiceImpl.OTPService;
-import com.eban.social_media.Services.ServiceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/OTP")
+@RequestMapping("/api/OTP")
 @CrossOrigin(origins = "*")
 public class OTPController {
 
     @Autowired
     private OTPService otpService;
 
-    @Autowired
-    private UserServiceImpl userServiceImpl;
-
-    @PostMapping
-    public ResponseEntity<?> sendOTP(@RequestParam Long userId){
+    @PostMapping()
+    public ResponseEntity<String> sendOTP(@RequestParam Long userId){
         try{
-            User user = userServiceImpl.getUserById(userId);
-            if(user == null){
-                return ResponseEntity.notFound().build();
-            }else{
-                otpService.saveOTP(user);
-                return ResponseEntity.ok().build();
-            }
+            otpService.saveOTP(userId);
+            return new ResponseEntity<>("Tạo thành công!",HttpStatus.OK);
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    // API để xác thực mã OTP
-    @PostMapping("/validate")
-    public ResponseEntity<?> validateOTP(@RequestParam Long userId, @RequestParam String otp) {
-        boolean isValid = otpService.validateOTP(userId.toString(), otp);
-        if (isValid) {
-            userServiceImpl.activateUser(userId);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity
-                    .badRequest()
-                    .body("OTP không hợp lệ hoặc đã hết hạn!");
+    @GetMapping
+    public ResponseEntity<String> getOTP(@RequestParam Long userId){
+        try{
+            String OTP = otpService.getOTP(userId.toString());
+            return new ResponseEntity<>(OTP,HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/active")
+    public ResponseEntity<String> checkOTP(@RequestParam Long userId, @RequestParam String otp){
+        if(otpService.checkOTP(userId, otp)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

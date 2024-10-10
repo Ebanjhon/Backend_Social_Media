@@ -14,19 +14,6 @@ services:
     networks:
       - social-network
 
-  redis:
-    image: redis:latest
-    container_name: redis-container
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - social-network
-
   app:
     build:
       context: .
@@ -35,13 +22,10 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
-      - redis
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/Social_Network
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: eban123
-      SPRING_REDIS_HOST: redis-container
-      SPRING_REDIS_PORT: 6379
     networks:
       - social-network
 

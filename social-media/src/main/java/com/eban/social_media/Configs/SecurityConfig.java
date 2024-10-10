@@ -4,6 +4,7 @@ import com.eban.social_media.JWT.JwtAuthenticationFilter;
 import com.eban.social_media.Services.ServiceImpl.UserServiceDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,20 +32,14 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/api/admin-auth", "/websocket/**").permitAll()  // Cho phép truy cập không cần xác thực vào API đăng nhập và đăng ký
-                        .anyRequest().authenticated()  // Các API khác yêu cầu xác thực
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Cho phép tất cả các yêu cầu OPTIONS
+                        .requestMatchers("/api/login", "/api/register", "/websocket/**", "/api/admin-auth").permitAll() // Không yêu cầu xác thực cho đăng nhập, đăng ký, websocket
+                        .anyRequest().authenticated()  // Yêu cầu xác thực với tất cả các API khác
                 )
-                .formLogin(form -> form
-                        .defaultSuccessUrl("/hello", true)  // Chuyển hướng tới trang /hello sau khi đăng nhập thành công
-                )
-                .logout()
-                .permitAll()  // Cho phép tất cả truy cập chức năng logout
-                .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);  // Sử dụng session nếu cần thiết
-
-        // Thêm filter JWT vào luồng xử lý (nếu bạn sử dụng JWT)
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Không sử dụng session, chỉ JWT
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Sử dụng JWT filter trước khi xác thực người dùng
 
         return http.build();
     }

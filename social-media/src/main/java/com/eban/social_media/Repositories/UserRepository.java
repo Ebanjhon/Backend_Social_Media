@@ -2,7 +2,10 @@ package com.eban.social_media.Repositories;
 
 import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.DTO.SearchUserDTO;
+import com.eban.social_media.DTO.UserDTO;
 import com.eban.social_media.Models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -41,4 +44,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "(SELECT COUNT(f) FROM UserFollow f WHERE f.user.id = :userId))"           // Đếm số người đang theo dõi (following)
     )
     ProfileDetailDTO getProfileDetail(@Param("userId") Long userId);
+
+//     quản lý user
+    @Query("SELECT new com.eban.social_media.DTO.UserDTO(u.id, u.firstname, u.lastname, u.username, u.gender, u.email, u.avatar, u.phone, u.birthDate, u.active) " +
+            "FROM User u WHERE " +
+            "(?1 IS NULL OR u.username LIKE %?1%) AND " +
+            "(?1 IS NULL OR u.firstname LIKE %?1%)")
+    Page<UserDTO> findUsersWithFilter(String text, Pageable pageable);
+
 }

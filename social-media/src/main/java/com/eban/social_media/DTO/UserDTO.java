@@ -1,5 +1,7 @@
 package com.eban.social_media.DTO;
 
+import com.eban.social_media.Models.Gender;
+
 import java.time.LocalDate;
 
 public class UserDTO {
@@ -8,16 +10,29 @@ public class UserDTO {
     private LocalDate birth;
     private boolean active;
 
-    public UserDTO(Long id, String firstName, String lastName, String username, String gender, String email, String avatar, String phone, String role, LocalDate birth, boolean active) {
+    public UserDTO(Long id, String firstName, String lastName, String username, Gender gender, String email, String avatar, String phone, String role, LocalDate birth, boolean active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.gender = gender;
+        this.gender = gender.toString();
         this.email = email;
         this.avatar = avatar;
         this.phone = phone;
         this.role = role;
+        this.birth = birth;
+        this.active = active;
+    }
+
+    public UserDTO(Long id, String firstName, String lastName, String username, Gender gender, String email, String avatar, String phone, LocalDate birth, boolean active) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.gender = gender.toString();
+        this.email = email;
+        this.avatar = avatar;
+        this.phone = phone;
         this.birth = birth;
         this.active = active;
     }
