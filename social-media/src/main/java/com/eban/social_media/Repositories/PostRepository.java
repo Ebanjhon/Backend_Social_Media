@@ -22,10 +22,9 @@ public interface PostRepository extends JpaRepository<Post, Long>{
             "LEFT JOIN UserFollow uf ON uf.user.id = :currentUserId AND uf.userFollow.id = p.user.id " +
             "LEFT JOIN LikePost l ON l.post.idPost = p.idPost " +
             "LEFT JOIN LikePost l2 ON l2.post.idPost = p.idPost AND l2.user.id = :currentUserId " +
-            "GROUP BY p.user.id, p.idPost, p.user.firstname, p.user.lastname, p.user.username, p.content, p.user.avatar, uf.id, p.postDate")
+            "GROUP BY p.user.id, p.idPost, p.user.firstname, p.user.lastname, p.user.username, p.content, p.user.avatar, uf.id, p.postDate " +
+            "ORDER BY p.idPost DESC")
     Page<ListPostDTO> findAllPostsWithMediaAndFollowStatus(@Param("currentUserId") Long currentUserId, Pageable pageable);
-
-
 
     @Query("SELECT COUNT(p) FROM Post p WHERE p.user.id = :userId")
     long countPostsByUserId(@Param("userId") Long userId);
@@ -51,5 +50,15 @@ public interface PostRepository extends JpaRepository<Post, Long>{
     // đếm số lượng like của bài viết
     @Query("SELECT COUNT(like.id) FROM LikePost like WHERE like.post.idPost = :postId")
     Long countLikePost(@Param("postId") Long postId);
+
+    // quản lý bài viết admin
+    @Query("SELECT new com.eban.social_media.DTO.ListPostDTO(u.id, p.idPost, u.firstname, u.lastname, u.username, " +
+            "p.content, u.avatar, p.postDate, COUNT(l)) " +
+            "FROM Post p " +
+            "JOIN p.user u " +
+            "LEFT JOIN LikePost l ON p.idPost = l.post.idPost " +
+            "WHERE (:text IS NULL OR :text = '' OR p.content LIKE %:text%) " +
+            "GROUP BY p.idPost, u.id")
+    Page<ListPostDTO> manaListPost(@Param("text") String text, Pageable pageable);
 
 }

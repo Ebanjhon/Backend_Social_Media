@@ -18,4 +18,6 @@ public interface PostService {
     List<MyPostDTO> getMyPost(Long userId);
     Page<ListPostDTO> getPostLiked(Long userId, Pageable pageable);
     Long countLike(Long postId);
+    List<ListPostDTO> manaListPosts(String text, Pageable pageable);
+    void updatePost(Long postId, String content);
 }

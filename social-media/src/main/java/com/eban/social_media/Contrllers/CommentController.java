@@ -1,13 +1,10 @@
 package com.eban.social_media.Contrllers;
 
 import com.eban.social_media.DTO.CommentCreateDTO;
-import com.eban.social_media.DTO.CommentDTO;
 import com.eban.social_media.DTO.CommentResponseDTO;
-import com.eban.social_media.Services.CommentService;
 import com.eban.social_media.Services.ServiceImpl.CommentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

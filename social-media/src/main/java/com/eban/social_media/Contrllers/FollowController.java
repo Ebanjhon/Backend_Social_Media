@@ -1,9 +1,7 @@
 package com.eban.social_media.Contrllers;
 
 import com.eban.social_media.DTO.FollowDTO;
-import com.eban.social_media.Services.FollowService;
 import com.eban.social_media.Services.ServiceImpl.FollowServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

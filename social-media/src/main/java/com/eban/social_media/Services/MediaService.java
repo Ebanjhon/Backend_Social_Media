@@ -12,4 +12,6 @@ public interface MediaService{
     void updateMedia(Media media);
     List<Media> findMediaByPostId(Long postId);
     Page<MediaDTO> getMediaByPostId(Long userId, Pageable pageable);
+    void deleteMediaByPostId(Long postId);
+    void deleteMediaByMediaId(Long mediaId);
 }

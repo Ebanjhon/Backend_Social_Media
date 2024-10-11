@@ -47,4 +47,9 @@ public class LikeServiceImpl implements LikeService {
             return false;
         }
     }
+
+    @Override
+    public void deletePost(Long postId) {
+        likePostRepository.deleteByPostId(postId);
+    }
 }

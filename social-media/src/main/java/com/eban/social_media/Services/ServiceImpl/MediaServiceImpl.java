@@ -4,6 +4,7 @@ import com.eban.social_media.DTO.MediaDTO;
 import com.eban.social_media.Models.Media;
 import com.eban.social_media.Repositories.MediaRepository;
 import com.eban.social_media.Services.MediaService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,5 +36,16 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Page<MediaDTO> getMediaByPostId(Long userId, Pageable pageable) {
         return mediaRepository.getMediasByUserId(userId, pageable);
+    }
+
+    @Override
+    public void deleteMediaByPostId(Long postId) {
+        mediaRepository.deleteMediaByPostId(postId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMediaByMediaId(Long mediaId) {
+        mediaRepository.deleteById(mediaId);
     }
 }

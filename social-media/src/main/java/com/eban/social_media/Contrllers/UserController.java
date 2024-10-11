@@ -1,6 +1,5 @@
 package com.eban.social_media.Contrllers;
 
-import com.eban.social_media.DTO.ManaUserDTO;
 import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.DTO.SearchUserDTO;
 import com.eban.social_media.DTO.UserDTO;
@@ -10,15 +9,12 @@ import com.eban.social_media.Services.ServiceImpl.StorageService;
 import com.eban.social_media.Services.ServiceImpl.UserServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.List;
 

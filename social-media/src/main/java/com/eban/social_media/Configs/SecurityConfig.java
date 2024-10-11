@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Cho phép tất cả các yêu cầu OPTIONS
-                        .requestMatchers("/api/login", "/api/register", "/websocket/**", "/api/admin-auth").permitAll() // Không yêu cầu xác thực cho đăng nhập, đăng ký, websocket
+                        .requestMatchers("/api/login", "/api/register", "/websocket/**", "/api/admin-auth", "/ws/**").permitAll() // Không yêu cầu xác thực cho đăng nhập, đăng ký, websocket
                         .anyRequest().authenticated()  // Yêu cầu xác thực với tất cả các API khác
                 )
                 .sessionManagement()
@@ -43,7 +43,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

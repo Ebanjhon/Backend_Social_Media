@@ -1,6 +1,5 @@
 package com.eban.social_media.Contrllers;
 
-import com.eban.social_media.DTO.ListPostDTO;
 import com.eban.social_media.DTO.MediaDTO;
 import com.eban.social_media.Services.ServiceImpl.MediaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

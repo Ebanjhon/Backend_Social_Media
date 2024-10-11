@@ -7,7 +7,6 @@ import com.eban.social_media.Models.User;
 import com.eban.social_media.Services.ServiceImpl.ChatServiceImpl;
 import com.eban.social_media.Services.ServiceImpl.RoomChatServiceImpl;
 import com.eban.social_media.Services.ServiceImpl.UserServiceImpl;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

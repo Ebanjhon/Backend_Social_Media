@@ -6,6 +6,7 @@ import com.eban.social_media.DTO.MyPostDTO;
 import com.eban.social_media.Models.Post;
 import com.eban.social_media.Repositories.CommentRepository;
 import com.eban.social_media.Repositories.MediaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.eban.social_media.Repositories.PostRepository;
@@ -13,6 +14,7 @@ import com.eban.social_media.Services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,9 +49,11 @@ public class PostServiceImpl implements PostService {
         // Bước 2: Lấy media cho từng bài đăng và ánh xạ vào DTO
         postsPage.forEach(postDTO -> {
             // Lấy danh sách media từ MediaRepository
+
+
             List<MediaDTO> mediaDTOs = mediaRepository.findMediaByPostId(postDTO.getIdPost())
                     .stream()
-                    .map(media -> new MediaDTO(media.getMediaType(), media.getMediaUrl()))
+                    .map(media -> new MediaDTO(media.getIdMedia(), media.getMediaType(), media.getMediaUrl()))
                     .collect(Collectors.toList());
 
             // Gán danh sách media vào DTO
@@ -106,6 +110,37 @@ public class PostServiceImpl implements PostService {
     @Override
     public Long countLike(Long postId) {
         return postRepository.countLikePost(postId);
+    }
+
+    @Override
+    public List<ListPostDTO> manaListPosts(String text, Pageable pageable) {
+        // Lấy danh sách bài viết có phân trang từ postRepository
+        Page<ListPostDTO> postsPage = postRepository.manaListPost(text, pageable);
+
+        // Lấy danh sách bài viết từ Page
+        List<ListPostDTO> posts = postsPage.getContent();
+
+        // Ánh xạ media cho từng post
+        posts.forEach(postDTO -> {
+            // Lấy danh sách media từ MediaRepository
+            List<MediaDTO> mediaDTOs = mediaRepository.findMediaByPostId(postDTO.getIdPost())
+                    .stream()
+                    .map(media -> new MediaDTO(media.getMediaType(), media.getMediaUrl()))
+                    .collect(Collectors.toList());
+
+            // Thiết lập danh sách media cho post
+            postDTO.setMedias(mediaDTOs);
+        });
+
+        return posts;
+    }
+
+    @Override
+    @Transactional
+    public void updatePost(Long postId, String content) {
+        Post post = postRepository.getReferenceById(postId);
+        post.setContent(content);
+        postRepository.save(post);
     }
 
 }

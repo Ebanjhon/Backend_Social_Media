@@ -25,16 +25,26 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Kiểm tra sự tồn tại của user theo username
     boolean existsByUsername(String username);
 
+//    @Query("SELECT new com.eban.social_media.DTO.SearchUserDTO(u.id, u.username, u.firstname, u.lastname, u.avatar, " +
+//            "CASE WHEN (uf.id IS NOT NULL) THEN true ELSE false END, " +  // Kiểm tra nếu currentUser đang theo dõi u
+//            "(SELECT COUNT(f.id) FROM UserFollow f WHERE f.userFollow.id = u.id)) " +  // Đếm số lượng người theo dõi u
+//            "FROM User u " +
+//            "LEFT JOIN UserFollow uf ON uf.userFollow.id = u.id AND uf.user.id = :currentUserId " +
+//            "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+//            "LOWER(u.firstname) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+//            "LOWER(u.lastname) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+//    List<SearchUserDTO> searchUsersWithFollowStatus(@Param("searchTerm") String searchTerm, @Param("currentUserId") Long currentUserId);
+
     @Query("SELECT new com.eban.social_media.DTO.SearchUserDTO(u.id, u.username, u.firstname, u.lastname, u.avatar, " +
             "CASE WHEN (uf.id IS NOT NULL) THEN true ELSE false END, " +  // Kiểm tra nếu currentUser đang theo dõi u
             "(SELECT COUNT(f.id) FROM UserFollow f WHERE f.userFollow.id = u.id)) " +  // Đếm số lượng người theo dõi u
             "FROM User u " +
             "LEFT JOIN UserFollow uf ON uf.userFollow.id = u.id AND uf.user.id = :currentUserId " +
-            "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
+            "WHERE (:searchTerm IS NULL OR :searchTerm = '' OR " +
+            "LOWER(u.username) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
             "LOWER(u.firstname) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
-            "LOWER(u.lastname) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+            "LOWER(u.lastname) LIKE LOWER(CONCAT('%', :searchTerm, '%'))) ")
     List<SearchUserDTO> searchUsersWithFollowStatus(@Param("searchTerm") String searchTerm, @Param("currentUserId") Long currentUserId);
-
 
     // lấy thông tin chi tiết
 
@@ -46,10 +56,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     ProfileDetailDTO getProfileDetail(@Param("userId") Long userId);
 
 //     quản lý user
-    @Query("SELECT new com.eban.social_media.DTO.UserDTO(u.id, u.firstname, u.lastname, u.username, u.gender, u.email, u.avatar, u.phone, u.birthDate, u.active) " +
-            "FROM User u WHERE " +
-            "(?1 IS NULL OR u.username LIKE %?1%) AND " +
-            "(?1 IS NULL OR u.firstname LIKE %?1%)")
-    Page<UserDTO> findUsersWithFilter(String text, Pageable pageable);
+@Query("SELECT new com.eban.social_media.DTO.UserDTO(u.id, u.firstname, u.lastname, u.username, u.gender, u.email, u.avatar, u.phone, u.birthDate, u.active) " +
+        "FROM User u WHERE " +
+        "(:text IS NULL OR :text = '' OR u.username LIKE %:text% OR u.firstname LIKE %:text% OR u.lastname LIKE %:text%)")
+Page<UserDTO> findUsersWithFilter(@Param("text") String text, Pageable pageable);
 
 }

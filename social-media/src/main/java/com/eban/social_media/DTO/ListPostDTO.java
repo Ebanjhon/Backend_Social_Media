@@ -29,6 +29,18 @@ public class ListPostDTO {
         this.isLiked = isLiked;
     }
 
+    public ListPostDTO(Long idUser, Long idPost, String firstname, String lastname, String username, String content, String avatar, LocalDateTime dateCreated, Long likes) {
+        this.idUser = idUser;
+        this.idPost = idPost;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.content = content;
+        this.avatar = avatar;
+        this.dateCreated = dateCreated;
+        this.likes = likes;
+    }
+
     //    getter and setter
 
     public Long getIdUser() {

@@ -3,7 +3,6 @@ package com.eban.social_media.Contrllers;
 import com.eban.social_media.DTO.LikeDTO;
 import com.eban.social_media.DTO.ListPostDTO;
 import com.eban.social_media.DTO.MyPostDTO;
-import com.eban.social_media.DTO.ProfileDetailDTO;
 import com.eban.social_media.Models.Media;
 import com.eban.social_media.Models.Post;
 import com.eban.social_media.Models.User;
@@ -46,6 +45,7 @@ public class PostController {
 
     @Autowired
     private LikeServiceImpl likeServiceImpl;
+
     @Autowired
     private PostServiceImpl postServiceImpl;
 
@@ -148,6 +148,10 @@ public class PostController {
     @DeleteMapping
     public ResponseEntity<String> deletePost(@RequestParam Long postId) {
         try {
+            // xóa media
+            mediaService.deleteMediaByPostId(postId);
+            //xóa thích
+            likeServiceImpl.deletePost(postId);
             // xóa comment
             commentServiceImpl.deleteCommentByPostId(postId);
             // Xóa bài viết
@@ -207,6 +211,20 @@ public class PostController {
             return ResponseEntity.ok(likedto);
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updatePost(@RequestParam Long postId,@RequestParam String content, @RequestParam List<Long> idMedias) {
+        try {
+            postServiceImpl.updatePost(postId, content);
+            for(Long id: idMedias)
+            {
+                mediaService.deleteMediaByMediaId(id);
+            }
+            return new ResponseEntity<>("Cập nhật thành công", HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Cập nhật thất bại",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
