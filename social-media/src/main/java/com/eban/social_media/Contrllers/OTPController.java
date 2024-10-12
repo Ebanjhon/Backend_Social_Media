@@ -1,5 +1,6 @@
 package com.eban.social_media.Contrllers;
 
+import com.eban.social_media.DTO.RequestOTP;
 import com.eban.social_media.Services.ServiceImpl.OTPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,8 @@ public class OTPController {
     }
 
     @PostMapping("/active")
-    public ResponseEntity<String> checkOTP(@RequestParam Long userId, @RequestParam String otp){
-        if(otpService.checkOTP(userId, otp)){
+    public ResponseEntity<String> checkOTP(@RequestBody RequestOTP requestOTP){
+        if(otpService.checkOTP(requestOTP.getUserId(), requestOTP.getOtp())){
             return new ResponseEntity<>(HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

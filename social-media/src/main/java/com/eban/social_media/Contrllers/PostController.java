@@ -3,6 +3,7 @@ package com.eban.social_media.Contrllers;
 import com.eban.social_media.DTO.LikeDTO;
 import com.eban.social_media.DTO.ListPostDTO;
 import com.eban.social_media.DTO.MyPostDTO;
+import com.eban.social_media.DTO.UpdatePostDTO;
 import com.eban.social_media.Models.Media;
 import com.eban.social_media.Models.Post;
 import com.eban.social_media.Models.User;
@@ -215,16 +216,15 @@ public class PostController {
     }
 
     @PutMapping
-    public ResponseEntity<String> updatePost(@RequestParam Long postId,@RequestParam String content, @RequestParam List<Long> idMedias) {
+    public ResponseEntity<String> updatePost(@RequestBody UpdatePostDTO updatePostRequest) {
         try {
-            postServiceImpl.updatePost(postId, content);
-            for(Long id: idMedias)
-            {
+            postServiceImpl.updatePost(updatePostRequest.getPostId(), updatePostRequest.getContent());
+            for(Long id: updatePostRequest.getIdMedias()) {
                 mediaService.deleteMediaByMediaId(id);
             }
             return new ResponseEntity<>("Cập nhật thành công", HttpStatus.OK);
-        }catch (Exception e) {
-            return new ResponseEntity<>("Cập nhật thất bại",HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Cập nhật thất bại", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

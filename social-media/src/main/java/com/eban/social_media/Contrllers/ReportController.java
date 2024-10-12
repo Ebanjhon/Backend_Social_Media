@@ -1,6 +1,7 @@
 package com.eban.social_media.Contrllers;
 
 
+import com.eban.social_media.DTO.ReportDTO;
 import com.eban.social_media.Services.ServiceImpl.ReportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,17 @@ public class ReportController {
     private ReportServiceImpl reportService;
 
     @PostMapping
-    public ResponseEntity<?> createReport(@RequestParam Long userId, @RequestParam Long postId, @RequestParam String content ){
-        try{
-            reportService.createReport(userId, postId, content);
+    public ResponseEntity<?> createReport(@RequestBody ReportDTO createReportRequest) {
+        try {
+            reportService.createReport(
+                    createReportRequest.getUserId(),
+                    createReportRequest.getPostId(),
+                    createReportRequest.getContent()
+            );
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
